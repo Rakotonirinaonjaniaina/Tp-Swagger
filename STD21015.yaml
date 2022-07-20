@@ -1,0 +1,187 @@
+openapi: 3.0.1
+info:
+  title: STD21015API
+  description: 'Global description of my API'
+  version: 1.0.0
+servers:
+  - url: https://STD21015.com
+tags:
+  - name: Students
+
+  - name: Courses
+paths:
+  /students:
+    get:
+      tags:
+        - Students
+      operationId: getStudents
+      summary: Get all students
+      description: Get all students with details
+      responses:
+        200:
+          description: List of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+        400:
+          description: Bad request
+    post:
+      tags:
+        - Students
+      operationId: createStudent
+      summary : Create new student
+      description: Create new student
+      requestBody:
+        description: Student to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStudent'
+        required: true
+      responses:
+        200:
+          description: List of students
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+        400:
+          description: Bad request
+
+    patch :
+      tags :
+        - Students 
+      summary : Update Student informations
+      description : Update Student informations
+      parameters:
+        - name: id
+          in: path
+          schema :
+            type : integer
+          required : true
+      requestBody : 
+        description : Update Student phone number
+        content :
+          application/json:
+            schema :
+              type : array
+              items : 
+                $ref: '#/components/schemas/Student'
+            examples:
+              changeName:
+                value:
+                  id: 1
+                  name: "Rakoto"
+              addPhoneNumber:
+                value: 
+                  id: 1
+                  number:
+                  - number: "0341234567"
+                    country_code: "+261"
+              chnageAdress :
+                value : 
+                  id : 1 
+                  adress : "III J 115 TER IVATO"
+      responses :
+        200 :
+          description : Update done
+          content :
+            application/json :
+              schema : 
+                $ref : '#/components/schemas/Student'
+     
+    delete:
+      tags:
+        - Students
+      summary : Delete specified student
+      description : Delete all or one student
+      parameters:
+        - name : id
+          in: path
+          schema :
+            type : integer
+          required: true
+      responses:
+        200:
+          description: Resources deleted
+        400:
+          description: Bad request
+
+components:
+  schemas:
+    PhoneNumber :
+        type : object
+        properties :
+          country-code :
+            type : string 
+            example : "+261"
+          number : 
+            type : string 
+            example : "+261330212237"
+    CreateStudent:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Rakoto"
+        birth_date:
+          type: string
+          format: date
+          example: "2022-01-01"
+        adress : 
+          type : string 
+          example : "II J 115 BIS D Ivadry"
+        
+    Student:
+      allOf:
+        - $ref: '#/components/schemas/CreateStudent'
+        - $ref: '#/components/schemas/PhoneNumber'
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+
+    CreateCourse:
+      type: object
+      properties:
+        id:
+          type: integer
+          example : 1
+        code :
+          type: string
+          example: "EL1"
+        name :
+          type: string
+          example: "api"
+        Teacher :
+          type : string
+          example : "Harry"
+        createdDate :
+          type: string
+          example : "2022-01-01"
+    Courses :
+      allOf:
+        - $ref: '#/components/schemas/CreateCourse'
+      type: object
+      properties:
+        id:
+          type: integer
+          example : 1
+        code :
+          type: string
+          example: "EL1"
+        name :
+          type: string
+          example: "aPI"
+        Teacher :
+          type : string
+          example : "Harry"
+        createdDate :
+          type: string
+          example : "2022-01-01"
+
+               
